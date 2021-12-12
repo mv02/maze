@@ -2,6 +2,31 @@ import Tile from "./tile";
 import Wall from "./wall";
 
 type Orientation = 'H' | 'V';
+type Direction = { name: 'N' | 'E' | 'S' | 'W', x: -1 | 0 | 1, y: -1 | 0 | 1 };
+
+export function getRandomDirection() {
+  return [
+    { name: 'N', x: 0, y: -1 },
+    { name: 'E', x: 1, y: 0 },
+    { name: 'S', x: 0, y: 1 },
+    { name: 'W', x: -1, y: 0 },
+  ][Math.floor(Math.random() * 4)] as Direction;
+}
+
+export function getRandomEdgeTile(a: Tile[][], direction: Direction) {
+  const index = Math.floor(Math.random() * (a.length - 1));
+
+  switch (direction.name) {
+    case 'N':
+      return a[0][index];
+    case 'E':
+      return a[index][a.length - 1];
+    case 'S':
+      return a[a.length - 1][index];
+    default:
+      return a[index][0];
+  }
+}
 
 export function splitField(a: Tile[][], orientation: Orientation, index: number) {
   if (orientation === 'H') return [a.slice(0, index), a.slice(index)];
