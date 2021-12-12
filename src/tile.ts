@@ -3,6 +3,7 @@ export default class Tile {
   public y: number;
   public isStart: boolean = false;
   public isExit: boolean = false;
+  public visited: boolean = false;
 
   public constructor(x: number, y: number) {
     this.x = x;

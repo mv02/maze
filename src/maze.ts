@@ -8,6 +8,9 @@ export default class Maze {
   private size: number;
   private tileSize: number;
   private wallWidth: number;
+  private startTile: Tile;
+  private exitTile: Tile;
+  private solution: Tile[] = [];
 
   public constructor(size: number = 20, tileSize: number = 30, wallWidth: number = 3) {
     this.size = size;
@@ -15,8 +18,8 @@ export default class Maze {
     this.wallWidth = wallWidth;
     this.createField();
     this.createEdges();
-    this.generateStart();
-    this.generateExit();
+    this.startTile = this.generateStart();
+    this.exitTile = this.generateExit();
     this.divide(this.tiles, 0);
   }
 
@@ -44,12 +47,14 @@ export default class Maze {
 
     const startTile = this.tiles[y][x];
     startTile.isStart = true;
+    return startTile;
   }
 
   private generateExit() {
     const direction = utils.getRandomDirection();
     const exitTile = utils.getRandomEdgeTile(this.tiles, direction);
     exitTile.isExit = true;
+    return exitTile;
   }
 
   private divide(chamber: Tile[][], i: number): Tile[][] {
@@ -69,9 +74,42 @@ export default class Maze {
     return utils.joinFields(this.divide(subchambers[0], i + 1), this.divide(subchambers[1], i + 1), orientation);
   }
 
+  private findPath(from: Tile, to: Tile, path: Tile[]): Tile[] {
+    from.visited = true;
+    if (from.x === to.x && from.y === to.y) return path.concat(from);
+
+    for (const direction of utils.directions) {
+      const next = (this.tiles[from.y + direction.y] || [])[from.x + direction.x];
+      if (!next || next.visited || !utils.canMove(from, direction, this.walls)) continue;
+
+      path.push(from);
+      return this.findPath(next, to, path);
+    }
+
+    const prev = path.pop() as Tile;
+    return this.findPath(prev, to, path);
+  }
+  
+  public solve() {
+    this.solution = this.findPath(this.startTile, this.exitTile, []);
+  }
+
   public draw(ctx: CanvasRenderingContext2D) {
     this.tiles.forEach(row => row.forEach(tile => tile.draw(ctx, this.tileSize)));
     this.walls.forEach(wall => wall.draw(ctx, this.tileSize, this.wallWidth));
+    ctx.stroke();
+  }
+
+  public drawSolution(ctx: CanvasRenderingContext2D) {
+    this.drawPath(ctx, this.solution);
+  }
+
+  private drawPath(ctx: CanvasRenderingContext2D, path: Tile[]) {
+    ctx.beginPath();
+    ctx.strokeStyle = '#4b42f5';
+    ctx.lineWidth = this.tileSize / 4;
+    ctx.moveTo(path[0].x * this.tileSize + this.tileSize / 2, path[0].y * this.tileSize + this.tileSize / 2);
+    path.slice(1).forEach(tile => ctx.lineTo(tile.x * this.tileSize + this.tileSize / 2, tile.y * this.tileSize + this.tileSize / 2));
     ctx.stroke();
   }
 }
