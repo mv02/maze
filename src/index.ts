@@ -1,3 +1,4 @@
+import './app.css';
 import Maze from "./maze";
 
 const canvas = document.querySelector('canvas') as HTMLCanvasElement;
