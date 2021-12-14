@@ -1,10 +1,8 @@
 import './app.css';
-import Maze from "./maze";
+import App from './App.svelte';
 
-const canvas = document.querySelector('canvas') as HTMLCanvasElement;
-const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+const app = new App({
+  target: document.getElementById('app') as Element,
+});
 
-const m = new Maze();
-m.draw(ctx);
-m.solve();
-m.drawSolution(ctx);
+export default app;

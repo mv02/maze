@@ -15,6 +15,19 @@ module.exports = {
         test: /\.css$/,
         use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
+      {
+        test: /\.svelte$/,
+        use: {
+          loader: 'svelte-loader',
+          options: {
+            preprocess: require('svelte-preprocess')({
+              postcss: {
+                plugins: [require('tailwindcss'), require('autoprefixer')],
+              },
+            }),
+          },
+        },
+      },
     ],
   },
   resolve: { extensions: ['.ts'] },
