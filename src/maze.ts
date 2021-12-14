@@ -95,6 +95,7 @@ export default class Maze {
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
+    ctx.beginPath();
     this.tiles.forEach(row => row.forEach(tile => tile.draw(ctx, this.tileSize)));
     this.walls.forEach(wall => wall.draw(ctx, this.tileSize, this.wallWidth));
     ctx.stroke();

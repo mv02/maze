@@ -12,6 +12,7 @@ export default class Wall {
   }
 
   public draw(ctx: CanvasRenderingContext2D, tileSize: number, wallWidth: number) {
+    ctx.strokeStyle = '#000000';
     ctx.lineWidth = wallWidth;
     ctx.moveTo(this.x * tileSize, this.y * tileSize);
 
