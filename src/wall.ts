@@ -14,11 +14,18 @@ export default class Wall {
   public draw(ctx: CanvasRenderingContext2D, tileSize: number, wallWidth: number) {
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = wallWidth;
-    ctx.moveTo(this.x * tileSize, this.y * tileSize);
+    const start = { x: this.x * tileSize, y: this.y * tileSize };
+    const end = { x: this.x * tileSize, y: this.y * tileSize };
 
-    if (this.direction === 'E')
-      ctx.lineTo((this.x + 1) * tileSize, this.y * tileSize);
-    else
-      ctx.lineTo(this.x * tileSize, (this.y + 1) * tileSize);
+    if (this.direction === 'E') {
+      start.x -= wallWidth / 2;
+      end.x += tileSize + wallWidth / 2;
+    }
+    else {
+      start.y -= wallWidth / 2; 
+      end.y += tileSize + wallWidth / 2;
+    }
+    ctx.moveTo(start.x, start.y);
+    ctx.lineTo(end.x, end.y);
   }
 }
