@@ -46,7 +46,7 @@
     </NumberInput>
 
     <div class="flex justify-end">
-      <button on:click={generate} class="btn">Generate</button>
+      <button on:click={generate} disabled={drawingSolution} class="btn">Generate</button>
     </div>
 
     <div class="flex items-center gap-2">
