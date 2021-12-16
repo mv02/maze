@@ -6,6 +6,7 @@
   let size: number = 20;
   let maze: Maze;
   let solved: boolean = false;
+  let drawingSolution: boolean = false;
 
   let container: Element;
   let canvas: HTMLCanvasElement;
@@ -30,12 +31,11 @@
   }
 
   $: if (maze) {
-    try {
-      solved ? maze.drawSolution(ctx) : maze.draw(ctx);
+    if (solved) {
+      drawingSolution = true;
+      maze.drawSolution(ctx).then(() => drawingSolution = false);
     }
-    catch (e) {
-      console.error(e);
-    }
+    else maze.draw(ctx);
   }
 </script>
 
@@ -50,7 +50,7 @@
     </div>
 
     <div class="flex items-center gap-2">
-      <input type="checkbox" id="solved" bind:checked={solved}>
+      <input type="checkbox" id="solved" bind:checked={solved} disabled={drawingSolution}>
       <label for="solved" class="text-sm">Show solution</label>
     </div>
   </div>

@@ -102,15 +102,19 @@ export default class Maze {
   }
 
   public drawSolution(ctx: CanvasRenderingContext2D) {
-    this.drawPath(ctx, this.solution);
+    return new Promise(resolve => this.drawPath(ctx, this.solution, 500 / this.size).then(resolve));
   }
 
-  private drawPath(ctx: CanvasRenderingContext2D, path: Tile[]) {
+  private async drawPath(ctx: CanvasRenderingContext2D, path: Tile[], delay: number = 0) {
     ctx.beginPath();
     ctx.strokeStyle = '#4b42f5';
     ctx.lineWidth = this.tileSize / 4;
     ctx.moveTo(path[0].x * this.tileSize + this.tileSize / 2, path[0].y * this.tileSize + this.tileSize / 2);
-    path.slice(1).forEach(tile => ctx.lineTo(tile.x * this.tileSize + this.tileSize / 2, tile.y * this.tileSize + this.tileSize / 2));
-    ctx.stroke();
+
+    for (const tile of path.slice(1)) {
+      ctx.lineTo(tile.x * this.tileSize + this.tileSize / 2, tile.y * this.tileSize + this.tileSize / 2);
+      ctx.stroke();
+      await utils.sleep(delay);
+    }
   }
 }

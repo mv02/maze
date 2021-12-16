@@ -1,6 +1,10 @@
 import Tile from "./tile";
 import Wall from "./wall";
 
+export function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 type Orientation = 'H' | 'V';
 type Direction = { name: 'N' | 'E' | 'S' | 'W', x: -1 | 0 | 1, y: -1 | 0 | 1 };
 export const directions: Direction[] = [
