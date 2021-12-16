@@ -51,7 +51,7 @@
 
     <div class="flex items-center gap-2">
       <input type="checkbox" id="solved" bind:checked={solved} disabled={drawingSolution}>
-      <label for="solved" class="text-sm">Show solution</label>
+      <label for="solved" class="text-sm select-none">Show solution</label>
     </div>
   </div>
 
